@@ -1,0 +1,56 @@
+var h=0
+var mic, fft;
+
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  frameRate(24)
+  mic = new p5.AudioIn();
+  mic.start();
+  fft = new p5.FFT();
+  fft.setInput(mic);
+  colorMode(HSB);
+  
+  background(0, 0, 10);
+}
+
+
+function draw() {
+  if (keyIsPressed === true) {
+  rectMode(CORNER); 
+  noStroke();
+  fill(0, 0, 0,0.008);
+  rect(0,0,windowWidth,windowWidth)
+  
+  var angle = random(0,359);
+  var vol = mic.getLevel();
+  var spectrum = fft.analyze().slice(70,140);  
+  var peak = max(spectrum);
+  
+  
+  stroke(h,80,80);
+  rectMode(CENTER); 
+  angleMode(RADIANS)
+  // rotate(angle);
+  noFill();
+  
+  rect(windowWidth/2 + peak*1.5, windowHeight/2  + vol*2000, 10+ vol*1000, 10 + vol*1000);
+  rect(windowWidth/2  + -peak*1.5, windowHeight/2  + -vol*2000, 10+ vol*1000, 10 + vol*1000);
+  rect(windowWidth/2  + peak*1.5, windowHeight/2  + -vol*2000, 10+ vol*1000, 10 + vol*1000);
+  rect(windowWidth/2  + -peak*1.5, windowHeight/2  + vol*2000, 10+ vol*1000, 10 + vol*1000);
+  
+  h=h+0.2;
+  
+  if(h == 360) {
+  	h=0;
+  }
+  }
+  
+ 	if (mouseIsPressed) {
+	rectMode(CORNER); 
+  noStroke();
+  fill(0, 0, 10);
+  rect(0,0,windowWidth,windowWidth)
+    
+}
+}
